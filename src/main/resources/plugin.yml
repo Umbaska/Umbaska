@@ -1,0 +1,6 @@
+name: Umbaska
+authors: [nfell2009, xXAndrew28Xx, Nicofisi]
+version: 4
+website: "http://umbaska.co.uk/"
+
+main: uk.co.umbaska.Umbaska

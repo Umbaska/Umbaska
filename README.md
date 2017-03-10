@@ -1,2 +1,2 @@
 # Umbaska
-A complete recode of Umbaska led by @xXAndrew28Xx
+This is a complete recode of Umbaska led by @xXAndrew28Xx.
