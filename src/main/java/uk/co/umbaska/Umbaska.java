@@ -1,6 +1,6 @@
 package uk.co.umbaska;
 
-import ch.njol.skript.Skript;
+import  ch.njol.skript.Skript;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import uk.co.umbaska.config.ConfigFile;

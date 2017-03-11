@@ -5,10 +5,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
-import uk.co.umbaska.registrations.AutoRegisteringSkriptElement;
-import uk.co.umbaska.registrations.EventSource;
-import uk.co.umbaska.registrations.ExpressionManagerProvider;
-import uk.co.umbaska.registrations.UExpression;
+import uk.co.umbaska.registrations.*;
 import uk.co.umbaska.skript.ExpressionManager;
 
 import java.lang.reflect.Method;
@@ -20,9 +17,15 @@ import java.util.function.Function;
 /**
  * @author Andrew Tran
  */
-public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> implements AutoRegisteringSkriptElement, ExpressionManagerProvider {
+public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> implements AutoRegisteringSkriptElement, ExpressionManagerProvider, DynamicSyntax {
     private Class<T> inferredClass;
     private ExpressionManager expressionManager;
+
+    @Override
+    public String[] getSyntax() {
+        return null;
+    }
+
     @Override
     public boolean isSingle() {
         return true;
