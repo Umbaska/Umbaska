@@ -3,4 +3,6 @@ authors: [nfell2009, xXAndrew28Xx, Nicofisi]
 version: 4
 website: "http://umbaska.co.uk/"
 
+depend: [Skript]
+
 main: uk.co.umbaska.Umbaska
