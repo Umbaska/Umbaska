@@ -15,6 +15,12 @@ for i in "$@" ; do
             cp spigot-*.jar ../run/spigot.jar
             cd ../
         fi
+        for i in "$@" ; do
+            if [[ $i == "deleteconfig" ]] ; then
+                echo "Deleting Umbaska Config from server"
+                rm -rf run/plugins/Umbaska/config.yml
+            fi
+        done
         mkdir -p run
         mkdir -p run/plugins
         cp target/Umbaska.jar run/plugins/Umbaska.jar

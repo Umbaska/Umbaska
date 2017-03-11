@@ -1,6 +1,6 @@
 name: Umbaska
 authors: [nfell2009, xXAndrew28Xx, Nicofisi]
-version: 4
+version: ${project.version}
 website: "http://umbaska.co.uk/"
 
 depend: [Skript]
