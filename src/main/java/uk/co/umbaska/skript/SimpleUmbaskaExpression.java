@@ -90,7 +90,7 @@ public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> imp
                     throw new BindedSyntaxException(String.format("Out of bounds binding error. bindName %s was #%d to be binded bu" +
                             "t there are only %d expressions. You can add an `-` to the beginning of a bindName for it to be able to be" +
                             "omitted without any error. IF YOU ARE NOT THE ADDON DEV, PLEASE REPORT THIS ERROR TO THE ADDON DEVELOPER OR" +
-                            " ON FORUMS IF YOU CANT FIGURE OUT THE ADDON/MODULE FROM THIS ERROR", bindName, i2 + 1, expressions.length + 1));
+                            " ON FORUMS IF YOU CANT FIGURE OUT THE ADDON/MODULE FROM THIS ERROR", bindName, i2 + 1, expressions.length));
                 }
             }
         }
