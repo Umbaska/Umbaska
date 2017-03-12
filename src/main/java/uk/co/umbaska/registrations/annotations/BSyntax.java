@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BSyntax {
     String[] syntax();
-    String bind();
+    String[] bind();
 }

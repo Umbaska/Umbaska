@@ -14,11 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class UmbaskaModule {
 	private ModuleInfo moduleInfo;
 	private boolean enabled = false;
+	private Logger logger;
+
 
 	public final void setModuleInfo(ModuleInfo moduleInfo) {
 		this.moduleInfo = moduleInfo;
@@ -45,8 +48,14 @@ public class UmbaskaModule {
 	}
 
 	public final void enable() {
+
+		logger = Logger.getLogger(moduleInfo.getName());
 		onEnable();
 		enabled = true;
+	}
+
+	public Logger getLogger(){
+		return logger;
 	}
 
     /**
@@ -70,6 +79,8 @@ public class UmbaskaModule {
             for (Class<? extends AutoRegisteringSkriptElement> cla : elements) {
                 syntaxLoader.load(cla);
             }
+            logger.info("Loaded: ");
+            logger.info(String.format("%d Expressions", syntaxLoader.getLoadedExpressions()));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {

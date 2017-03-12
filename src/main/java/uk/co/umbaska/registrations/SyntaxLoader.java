@@ -2,6 +2,7 @@ package uk.co.umbaska.registrations;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.ExpressionType;
+import com.google.common.math.BigIntegerMath;
 import uk.co.umbaska.Umbaska;
 import uk.co.umbaska.registrations.annotations.*;
 import uk.co.umbaska.skript.SimpleUmbaskaExpression;
@@ -14,6 +15,7 @@ import java.util.List;
  * @author Andrew Tran
  */
 public class SyntaxLoader {
+    int loadedExpressions = 0;
     public void load(Class<? extends AutoRegisteringSkriptElement> syntaxClass){
         String[] syntaxes = null;
         if (syntaxClass.isAnnotationPresent(Syntaxes.class)){
@@ -57,9 +59,14 @@ public class SyntaxLoader {
             try {
                 SimpleUmbaskaExpression simpleUmbaskaExpression = (SimpleUmbaskaExpression) syntaxClass.newInstance();
                 Skript.registerExpression(simpleUmbaskaExpression.getClass(), simpleUmbaskaExpression.getReturnType(), ExpressionType.SIMPLE, syntaxes);
+                loadedExpressions++;
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public int getLoadedExpressions() {
+        return loadedExpressions;
     }
 }
