@@ -1,7 +1,5 @@
 package uk.co.umbaska.modules;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import uk.co.umbaska.Umbaska;
 import uk.co.umbaska.registrations.AutoRegisteringSkriptElement;
 import uk.co.umbaska.registrations.SyntaxLoader;
@@ -12,7 +10,6 @@ import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.logging.*;
-import java.util.logging.Formatter;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class UmbaskaModule {
@@ -48,29 +45,7 @@ public class UmbaskaModule {
 	public final void enable() {
 		logger = Logger.getLogger(moduleInfo.getName());
 		logger.setUseParentHandlers(false);
-		Handler handler = new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-                Umbaska.getInstance().getLogger().log(record.getLevel(), record.getMessage());
-            }
-
-            @Override
-            public void flush() {
-
-            }
-
-            @Override
-            public void close() throws SecurityException {
-
-            }
-        };
-		handler.setFormatter(new Formatter() {
-            @Override
-            public String format(LogRecord record) {
-                return String.format("[%s] %s", moduleInfo.getName(), record.getMessage());
-            }
-        });
-		logger.addHandler(handler);
+		logger.addHandler(new ModuleLogHandler(moduleInfo));
 		onEnable();
 		enabled = true;
 	}
@@ -102,12 +77,9 @@ public class UmbaskaModule {
             }
             logger.info("Loaded: ");
             logger.info(String.format("%d Expressions", syntaxLoader.getLoadedExpressions()));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
-        // TODO : Print Totals
     }
 
 	/**
