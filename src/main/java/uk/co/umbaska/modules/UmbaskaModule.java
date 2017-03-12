@@ -47,15 +47,30 @@ public class UmbaskaModule {
 
 	public final void enable() {
 		logger = Logger.getLogger(moduleInfo.getName());
-		for (Handler handler : logger.getHandlers()){
-		    handler.setFormatter(new Formatter() {
-                @Override
-                public String format(LogRecord record) {
-                    return "[" + moduleInfo.getName() + "] " + record.getMessage();
-                }
-            });
-        }
-		logger.setParent(Bukkit.getLogger());
+		logger.setUseParentHandlers(false);
+		Handler handler = new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                Umbaska.getInstance().getLogger().log(record.getLevel(), record.getMessage());
+            }
+
+            @Override
+            public void flush() {
+
+            }
+
+            @Override
+            public void close() throws SecurityException {
+
+            }
+        };
+		handler.setFormatter(new Formatter() {
+            @Override
+            public String format(LogRecord record) {
+                return String.format("[%s] %s", moduleInfo.getName(), record.getMessage());
+            }
+        });
+		logger.addHandler(handler);
 		onEnable();
 		enabled = true;
 	}
