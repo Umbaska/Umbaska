@@ -3,6 +3,7 @@ package uk.co.umbaska.skript;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.lang.util.SimpleLiteral;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 import uk.co.umbaska.registrations.*;

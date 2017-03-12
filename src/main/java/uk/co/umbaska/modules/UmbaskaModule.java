@@ -10,11 +10,9 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
+import java.util.logging.Formatter;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class UmbaskaModule {
@@ -48,8 +46,16 @@ public class UmbaskaModule {
 	}
 
 	public final void enable() {
-
 		logger = Logger.getLogger(moduleInfo.getName());
+		for (Handler handler : logger.getHandlers()){
+		    handler.setFormatter(new Formatter() {
+                @Override
+                public String format(LogRecord record) {
+                    return "[" + moduleInfo.getName() + "] " + record.getMessage();
+                }
+            });
+        }
+		logger.setParent(Bukkit.getLogger());
 		onEnable();
 		enabled = true;
 	}
