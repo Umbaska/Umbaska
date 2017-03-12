@@ -3,6 +3,6 @@ authors: [nfell2009, xXAndrew28Xx, Nicofisi]
 version: ${project.version}
 website: "http://umbaska.co.uk/"
 
-depend: [Skript]
+softdepend: [Skript]
 
 main: uk.co.umbaska.Umbaska
