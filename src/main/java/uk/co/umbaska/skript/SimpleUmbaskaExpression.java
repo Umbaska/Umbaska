@@ -114,32 +114,34 @@ public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> imp
         }
         Object[] toReturn = null;
         Boolean implemented = false;
-        //I'm not sure of a workaround, as I can't instantiate an array from a generic type
-        for (Method method : getClass().getMethods()){
-            if (method.getDeclaringClass().equals(getClass())){
-                switch(method.getName()){
-                    case "getEventValue":
-                        toReturn = new Object[]{getEventValue(new EventSource(event))};
-                        implemented = true;
-                        break;
-                    case "getEventValues":
-                        toReturn = (Object[]) getEventValues(new EventSource(event));
-                        implemented = true;
-                        break;
-                    case "getValue":
-                        toReturn = new Object[]{getValue()};
-                        implemented = true;
-                        break;
-                    case "getValues":
-                        toReturn = (Object[]) getValues();
-                        implemented = true;
-                        break;
+        detect: {
+            for (Method method : getClass().getMethods()) {
+                if (method.getDeclaringClass().equals(getClass())) {
+                    switch (method.getName()) {
+                        case "getEventValue":
+                            toReturn = new Object[]{getEventValue(new EventSource(event))};
+                            implemented = true;
+                            break detect;
+                        case "getEventValues":
+                            toReturn = (Object[]) getEventValues(new EventSource(event));
+                            implemented = true;
+                            break detect;
+                        case "getValue":
+                            toReturn = new Object[]{getValue()};
+                            implemented = true;
+                            break detect;
+                        case "getValues":
+                            toReturn = (Object[]) getValues();
+                            implemented = true;
+                            break detect;
+                    }
                 }
             }
         }
         if (!implemented){
            throw new RuntimeException(String.format("Class %s does not implement getEventValue, getEventValues, getValue, or getValues.", getClass().getCanonicalName()));
         }
+        //I'm not sure of a workaround, as I can't instantiate an array from a generic type
         return (T[]) toReturn;
     }
 
