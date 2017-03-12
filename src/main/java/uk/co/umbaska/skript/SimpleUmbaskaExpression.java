@@ -152,7 +152,7 @@ public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> imp
                             implemented = true;
                             break detect;
                         case "getEventValues":
-                            toReturn = (Object[]) getEventValues(new EventSource(event));
+                            toReturn = getEventValues(new EventSource(event));
                             implemented = true;
                             break detect;
                         case "getValue":
@@ -160,7 +160,7 @@ public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> imp
                             implemented = true;
                             break detect;
                         case "getValues":
-                            toReturn = (Object[]) getValues();
+                            toReturn = getValues();
                             implemented = true;
                             break detect;
                     }
@@ -179,13 +179,13 @@ public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> imp
     public T getEventValue(EventSource eventSource){
         return null;
     }
-    public T getEventValues(EventSource eventSource){
+    public T[] getEventValues(EventSource eventSource){
         return null;
     }
     public T getValue(){
         return null;
     }
-    public T getValues(){
+    public T[] getValues(){
         return null;
     }
 
