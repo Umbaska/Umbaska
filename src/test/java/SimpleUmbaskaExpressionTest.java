@@ -11,10 +11,9 @@ import uk.co.umbaska.skript.SimpleUmbaskaExpression;
  * @author Andrew Tran
  */
 public class SimpleUmbaskaExpressionTest {
-    SimpleUmbaskaExpression<String> expression;
+    SimpleUmbaskaExpression<String> expression = new ExampleExpression();
     @Before
     public void setup(){
-        expression = new ExampleExpression();
         expression.init(new Expression[]{new SimpleLiteral<String>("test",false)}, 0, Kleenean.FALSE, null);
     }
     @Test
