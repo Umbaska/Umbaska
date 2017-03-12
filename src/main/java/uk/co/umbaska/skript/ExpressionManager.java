@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import uk.co.umbaska.registrations.UExpression;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -131,16 +132,30 @@ public class ExpressionManager {
         return (Float[]) getExpression(key).getMultiple(event);
     }
 
-    public int getInt(String key){
-        return (Integer) getExpression(key).get(event);
+    public Integer getInt(String key){
+        Object object = getExpression(key).get(event);
+        if (object instanceof Integer){
+            return (int) object;
+        }else if (object instanceof Number){
+            return ((Number) object).intValue();
+        }else{
+            return null;
+        }
     }
 
     public int getInt(String key, Integer fallback){
-        return expressions.containsKey(key) ? (Integer) getExpression(key).get(event) : fallback;
+        return expressions.containsKey(key) ? getInt(key) : fallback;
     }
 
     public Integer[] getIntegers(String key){
-        return (Integer[]) getExpression(key).getMultiple(event);
+        Object[] objects = getExpression(key).getMultiple(event);
+        if (objects instanceof Integer[]){
+            return (Integer[]) objects;
+        }else if (objects instanceof Number[]){
+            return Arrays.stream(((Number[]) objects)).map(Number::intValue).toArray(Integer[]::new);
+        }else{
+            return null;
+        }
     }
 
     public Number getNumber(String key){
@@ -154,8 +169,6 @@ public class ExpressionManager {
     public Number[] getNumbers(String key){
         return (Number[]) getExpression(key).getMultiple(event);
     }
-
-
 
     public ItemStack getItemStack(String key){
         return (ItemStack) getExpression(key).get(event);
