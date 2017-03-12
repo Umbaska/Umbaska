@@ -31,7 +31,36 @@ public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> imp
 
     @Override
     public boolean isSingle() {
-        return true;
+        Boolean implemented = false;
+        Boolean isSingle = null;
+        detect: {
+            for (Method method : getClass().getMethods()) {
+                if (method.getDeclaringClass().equals(getClass())) {
+                    switch (method.getName()) {
+                        case "getEventValue":
+                            implemented = true;
+                            isSingle = true;
+                            break detect;
+                        case "getEventValues":
+                            implemented = true;
+                            isSingle = false;
+                            break detect;
+                        case "getValue":
+                            implemented = true;
+                            isSingle = true;
+                            break detect;
+                        case "getValues":
+                            implemented = true;
+                            isSingle = false;
+                            break detect;
+                    }
+                }
+            }
+        }
+        if (!implemented){
+            throw new RuntimeException(String.format("Class %s does not implement getEventValue, getEventValues, getValue, or getValues.", getClass().getCanonicalName()));
+        }
+        return isSingle;
     }
 
     @Override
