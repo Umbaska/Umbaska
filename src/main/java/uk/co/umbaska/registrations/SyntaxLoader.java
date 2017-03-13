@@ -6,6 +6,7 @@ import com.google.common.math.BigIntegerMath;
 import uk.co.umbaska.Umbaska;
 import uk.co.umbaska.registrations.annotations.*;
 import uk.co.umbaska.skript.SimpleUmbaskaExpression;
+import uk.co.umbaska.skript.SimpleUmbaskaPropertyExpression;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,8 +58,33 @@ public class SyntaxLoader {
         }
         if (SimpleUmbaskaExpression.class.isAssignableFrom(syntaxClass)){
             try {
+                ExpressionType expressionType = ExpressionType.SIMPLE;
+                if (syntaxClass.isAnnotationPresent(ExprType.class)){
+                    expressionType = syntaxClass.getAnnotation(ExprType.class).value();
+                }
                 SimpleUmbaskaExpression simpleUmbaskaExpression = (SimpleUmbaskaExpression) syntaxClass.newInstance();
-                Skript.registerExpression(simpleUmbaskaExpression.getClass(), simpleUmbaskaExpression.getReturnType(), ExpressionType.SIMPLE, syntaxes);
+                Skript.registerExpression(simpleUmbaskaExpression.getClass(), simpleUmbaskaExpression.getReturnType(), expressionType, syntaxes);
+                loadedExpressions++;
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }else if (SimpleUmbaskaPropertyExpression.class.isAssignableFrom(syntaxClass)){
+            try {
+                ExpressionType expressionType = ExpressionType.PROPERTY;
+                if (syntaxClass.isAnnotationPresent(ExprType.class)){
+                    expressionType = syntaxClass.getAnnotation(ExprType.class).value();
+                }
+                SimpleUmbaskaPropertyExpression simpleUmbaskaPropertyExpression = (SimpleUmbaskaPropertyExpression) syntaxClass.newInstance();
+
+                if (syntaxes.length < 2){
+                    throw new RuntimeException(String.format("Property Expression %s does not have two syntaxes which denote the property and the fromType (see docs)", syntaxClass.getCanonicalName()));
+                }
+                String property = syntaxes[0];
+                String fromType = syntaxes[1];
+                String[] propertySyntaxes = {
+                    "[the] " + property + " of %" + fromType + "%", "%" + fromType + "%'[s] " + property
+                };
+                Skript.registerExpression(simpleUmbaskaPropertyExpression.getClass(), simpleUmbaskaPropertyExpression.getReturnType(), expressionType, propertySyntaxes);
                 loadedExpressions++;
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
