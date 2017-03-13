@@ -2,15 +2,14 @@ package uk.co.umbaska.registrations;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.ExpressionType;
-import com.google.common.math.BigIntegerMath;
 import uk.co.umbaska.Umbaska;
 import uk.co.umbaska.registrations.annotations.*;
-import uk.co.umbaska.skript.SimpleUmbaskaExpression;
-import uk.co.umbaska.skript.SimpleUmbaskaPropertyExpression;
+import uk.co.umbaska.skript.UmbaskaCondition;
+import uk.co.umbaska.skript.UmbaskaExpression;
+import uk.co.umbaska.skript.UmbaskaPropertyExpression;
 import uk.co.umbaska.skript.UmbaskaEffect;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,7 +17,8 @@ import java.util.List;
  */
 public class SyntaxLoader {
     private int loadedExpressions = 0;
-    private int loadedEffects;
+    private int loadedEffects = 0;
+    private int loadedConditions = 0;
 
     public void load(Class<? extends AutoRegisteringSkriptElement> syntaxClass){
         String[] syntaxes = null;
@@ -59,25 +59,25 @@ public class SyntaxLoader {
             Umbaska.getInstance().getLogger().severe(String.format("Class %s does not have any of the annotations Syntaxes, Syntax, BSyntaxes, BSyntax, or DynamicSyntaxes", syntaxClass.getCanonicalName()));
             return;
         }
-        if (SimpleUmbaskaExpression.class.isAssignableFrom(syntaxClass)){
+        if (UmbaskaExpression.class.isAssignableFrom(syntaxClass)){
             try {
                 ExpressionType expressionType = ExpressionType.SIMPLE;
                 if (syntaxClass.isAnnotationPresent(ExprType.class)){
                     expressionType = syntaxClass.getAnnotation(ExprType.class).value();
                 }
-                SimpleUmbaskaExpression simpleUmbaskaExpression = (SimpleUmbaskaExpression) syntaxClass.newInstance();
-                Skript.registerExpression(simpleUmbaskaExpression.getClass(), simpleUmbaskaExpression.getReturnType(), expressionType, syntaxes);
+                UmbaskaExpression umbaskaExpression = (UmbaskaExpression) syntaxClass.newInstance();
+                Skript.registerExpression(umbaskaExpression.getClass(), umbaskaExpression.getReturnType(), expressionType, syntaxes);
                 loadedExpressions++;
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-        }else if (SimpleUmbaskaPropertyExpression.class.isAssignableFrom(syntaxClass)){
+        }else if (UmbaskaPropertyExpression.class.isAssignableFrom(syntaxClass)){
             try {
                 ExpressionType expressionType = ExpressionType.PROPERTY;
                 if (syntaxClass.isAnnotationPresent(ExprType.class)){
                     expressionType = syntaxClass.getAnnotation(ExprType.class).value();
                 }
-                SimpleUmbaskaPropertyExpression simpleUmbaskaPropertyExpression = (SimpleUmbaskaPropertyExpression) syntaxClass.newInstance();
+                UmbaskaPropertyExpression umbaskaPropertyExpression = (UmbaskaPropertyExpression) syntaxClass.newInstance();
 
                 if (syntaxes.length < 2){
                     throw new RuntimeException(String.format("Property Expression %s does not have two syntaxes which denote the property and the fromType (see docs)", syntaxClass.getCanonicalName()));
@@ -87,7 +87,7 @@ public class SyntaxLoader {
                 String[] propertySyntaxes = {
                     "[the] " + property + " of %" + fromType + "%", "%" + fromType + "%'[s] " + property
                 };
-                Skript.registerExpression(simpleUmbaskaPropertyExpression.getClass(), simpleUmbaskaPropertyExpression.getReturnType(), expressionType, propertySyntaxes);
+                Skript.registerExpression(umbaskaPropertyExpression.getClass(), umbaskaPropertyExpression.getReturnType(), expressionType, propertySyntaxes);
                 loadedExpressions++;
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
@@ -100,6 +100,14 @@ public class SyntaxLoader {
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
+        }else if (UmbaskaCondition.class.isAssignableFrom(syntaxClass)){
+            try {
+                UmbaskaCondition umbaskaCondition = (UmbaskaCondition) syntaxClass.newInstance();
+                Skript.registerCondition(umbaskaCondition.getClass(), syntaxes);
+                loadedConditions++;
+            } catch (InstantiationException | IllegalAccessException e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -109,5 +117,9 @@ public class SyntaxLoader {
 
     public int getLoadedEffects() {
         return loadedEffects;
+    }
+
+    public int getLoadedConditions() {
+        return loadedConditions;
     }
 }
