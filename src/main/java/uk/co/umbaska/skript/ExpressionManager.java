@@ -24,6 +24,10 @@ public class ExpressionManager {
     private HashMap<String, UExpression> expressions = new HashMap<>();
     private Event event;
 
+    public HashMap<String, UExpression> getExpressions() {
+        return expressions;
+    }
+
     public void set(String key, UExpression UExpression){
         expressions.put(key, UExpression);
     }

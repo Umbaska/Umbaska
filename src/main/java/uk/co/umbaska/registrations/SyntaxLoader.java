@@ -7,6 +7,7 @@ import uk.co.umbaska.Umbaska;
 import uk.co.umbaska.registrations.annotations.*;
 import uk.co.umbaska.skript.SimpleUmbaskaExpression;
 import uk.co.umbaska.skript.SimpleUmbaskaPropertyExpression;
+import uk.co.umbaska.skript.UmbaskaEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,9 @@ import java.util.List;
  * @author Andrew Tran
  */
 public class SyntaxLoader {
-    int loadedExpressions = 0;
+    private int loadedExpressions = 0;
+    private int loadedEffects;
+
     public void load(Class<? extends AutoRegisteringSkriptElement> syntaxClass){
         String[] syntaxes = null;
         if (syntaxClass.isAnnotationPresent(Syntaxes.class)){
@@ -89,10 +92,22 @@ public class SyntaxLoader {
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
+        }else if (UmbaskaEffect.class.isAssignableFrom(syntaxClass)){
+            try {
+                UmbaskaEffect umbaskaEffect = (UmbaskaEffect) syntaxClass.newInstance();
+                Skript.registerEffect(umbaskaEffect.getClass(), syntaxes);
+                loadedEffects++;
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public int getLoadedExpressions() {
         return loadedExpressions;
+    }
+
+    public int getLoadedEffects() {
+        return loadedEffects;
     }
 }

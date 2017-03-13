@@ -77,6 +77,8 @@ public class UmbaskaModule {
             }
             logger.info("Loaded: ");
             logger.info(String.format("%d Expressions", syntaxLoader.getLoadedExpressions()));
+            logger.info(String.format("%d Effects", syntaxLoader.getLoadedEffects()));
+
         } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
