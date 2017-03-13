@@ -51,7 +51,6 @@ public abstract class UmbaskaEffect extends Effect implements AutoRegisteringSkr
                 if (indexExists(expressions, i2) || bindName.startsWith("-")){
                     if (indexExists(expressions, i2)) {
                         bindName = bindName.startsWith("-") ? bindName.substring(1) : bindName;
-                        System.out.println("BINDED " + bindName);
                         exp().bind(bindName, new UExpression(expressions[i2]));
                     }
                     //Nothing would happen if it didn't exist, and started with -.
