@@ -20,7 +20,7 @@ import java.util.function.Function;
 /**
  * @author Andrew Tran
  */
-public abstract class SimpleUmbaskaExpression<T> extends SimpleExpression<T> implements AutoRegisteringSkriptElement, ExpressionManagerProvider, DynamicSyntax {
+public abstract class UmbaskaExpression<T> extends SimpleExpression<T> implements AutoRegisteringSkriptElement, ExpressionManagerProvider, DynamicSyntax {
     private Class<T> inferredClass;
     private ExpressionManager expressionManager;
 

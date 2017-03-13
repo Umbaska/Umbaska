@@ -18,7 +18,7 @@ import java.util.function.Function;
 /**
  * @author Andrew Tran
  */
-public abstract class SimpleUmbaskaPropertyExpression<F,T> extends PropertyExpression<F,T> implements AutoRegisteringSkriptElement, ExpressionManagerProvider, DynamicSyntax {
+public abstract class UmbaskaPropertyExpression<F,T> extends PropertyExpression<F,T> implements AutoRegisteringSkriptElement, ExpressionManagerProvider, DynamicSyntax {
     private Class<T> inferredClass;
     private ExpressionManager expressionManager;
 

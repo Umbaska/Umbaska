@@ -8,15 +8,15 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import uk.co.umbaska.registrations.BindedSyntaxException;
 import uk.co.umbaska.registrations.annotations.BSyntax;
-import uk.co.umbaska.skript.SimpleUmbaskaExpression;
+import uk.co.umbaska.skript.UmbaskaExpression;
 
 /**
  * @author Andrew Tran
  */
-public class SimpleUmbaskaExpressionTest {
-    SimpleUmbaskaExpression<String> expression = new ExampleExpression();
-    SimpleUmbaskaExpression<String> invalidExpression = new InvalidBindExampleExpression();
-    SimpleUmbaskaExpression<String> omittedExpression = new OmittedBindExampleExpression();
+public class UmbaskaExpressionTest {
+    UmbaskaExpression<String> expression = new ExampleExpression();
+    UmbaskaExpression<String> invalidExpression = new InvalidBindExampleExpression();
+    UmbaskaExpression<String> omittedExpression = new OmittedBindExampleExpression();
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -47,7 +47,7 @@ public class SimpleUmbaskaExpressionTest {
     }
 
     @BSyntax(syntax = "example %text%", bind = {"text", "-nonexistant"})
-    public static class OmittedBindExampleExpression extends SimpleUmbaskaExpression<String>{
+    public static class OmittedBindExampleExpression extends UmbaskaExpression<String> {
         @Override
         public String getValue() {
             return exp().getString("text");
@@ -55,7 +55,7 @@ public class SimpleUmbaskaExpressionTest {
     }
 
     @BSyntax(syntax = "example %text%", bind = {"text", "nonexistant"})
-    public static class InvalidBindExampleExpression extends SimpleUmbaskaExpression<String>{
+    public static class InvalidBindExampleExpression extends UmbaskaExpression<String> {
         @Override
         public String getValue() {
             return exp().getString("text");
@@ -63,7 +63,7 @@ public class SimpleUmbaskaExpressionTest {
     }
 
     @BSyntax(syntax = "example %text%", bind = {"text"})
-    public static class ExampleExpression extends SimpleUmbaskaExpression<String>{
+    public static class ExampleExpression extends UmbaskaExpression<String> {
         @Override
         public String getValue() {
             return exp().getString("text");
