@@ -2,12 +2,10 @@ package uk.co.umbaska.registrations;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.registrations.Classes;
 import uk.co.umbaska.Umbaska;
 import uk.co.umbaska.registrations.annotations.*;
-import uk.co.umbaska.skript.UmbaskaCondition;
-import uk.co.umbaska.skript.UmbaskaExpression;
-import uk.co.umbaska.skript.UmbaskaPropertyExpression;
-import uk.co.umbaska.skript.UmbaskaEffect;
+import uk.co.umbaska.skript.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,47 +17,61 @@ public class SyntaxLoader {
     private int loadedExpressions = 0;
     private int loadedEffects = 0;
     private int loadedConditions = 0;
+    private int loadedTypes = 0;
 
     public void load(Class<? extends AutoRegisteringSkriptElement> syntaxClass){
         String[] syntaxes = null;
-        if (syntaxClass.isAnnotationPresent(Syntaxes.class)){
-            List<String> syntaxesList = new ArrayList<>();
-            Syntaxes syntaxesAnnotation = syntaxClass.getAnnotation(Syntaxes.class);
-            for (Syntax syntaxAnnotation : syntaxesAnnotation.value()){
-                for (String syntax : syntaxAnnotation.value()){
-                    syntaxesList.add(syntax);
+        if (!UmbaskaType.class.isAssignableFrom(syntaxClass)){
+            if (syntaxClass.isAnnotationPresent(Syntaxes.class)){
+                List<String> syntaxesList = new ArrayList<>();
+                Syntaxes syntaxesAnnotation = syntaxClass.getAnnotation(Syntaxes.class);
+                for (Syntax syntaxAnnotation : syntaxesAnnotation.value()){
+                    for (String syntax : syntaxAnnotation.value()){
+                        syntaxesList.add(syntax);
+                    }
                 }
+                syntaxes = syntaxesList.toArray(new String[syntaxesList.size()]);
+            }else if (syntaxClass.isAnnotationPresent(Syntax.class)){
+                syntaxes = syntaxClass.getAnnotation(Syntax.class).value();
+            }else if (syntaxClass.isAnnotationPresent(BSyntaxes.class)){
+                List<String> syntaxesList = new ArrayList<>();
+                BSyntaxes bSyntaxesAnnotation = syntaxClass.getAnnotation(BSyntaxes.class);
+                for (BSyntax bSyntax : bSyntaxesAnnotation.value()){
+                    for (String syntax : bSyntax.syntax()){
+                        syntaxesList.add(syntax);
+                    }
+                }
+                syntaxes = syntaxesList.toArray(new String[syntaxesList.size()]);
+            }else if (syntaxClass.isAnnotationPresent(BSyntax.class)) {
+                syntaxes = syntaxClass.getAnnotation(BSyntax.class).syntax();
+            }else if (syntaxClass.isAnnotationPresent(DynamicSyntaxes.class)){
+                try {
+                    String[] syntaxesDetected = ((DynamicSyntax) syntaxClass.newInstance()).getSyntax();
+                    if (syntaxesDetected == null){
+                        Umbaska.getInstance().getLogger().severe(String.format("Class %s has the DynamicSyntaxes annotation but does not implement DynamicSyntaxes properly (got null)", syntaxClass.getCanonicalName()));
+                        return;
+                    }
+                    syntaxes = syntaxesDetected;
+                } catch (InstantiationException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                Umbaska.getInstance().getLogger().severe(String.format("Class %s does not have any of the annotations Syntaxes, Syntax, BSyntaxes, BSyntax, or DynamicSyntaxes", syntaxClass.getCanonicalName()));
+                return;
             }
-            syntaxes = syntaxesList.toArray(new String[syntaxesList.size()]);
-        }else if (syntaxClass.isAnnotationPresent(Syntax.class)){
-            syntaxes = syntaxClass.getAnnotation(Syntax.class).value();
-        }else if (syntaxClass.isAnnotationPresent(BSyntaxes.class)){
-            List<String> syntaxesList = new ArrayList<>();
-            BSyntaxes bSyntaxesAnnotation = syntaxClass.getAnnotation(BSyntaxes.class);
-            for (BSyntax bSyntax : bSyntaxesAnnotation.value()){
-                for (String syntax : bSyntax.syntax()){
-                    syntaxesList.add(syntax);
+        }
+        if (UmbaskaType.class.isAssignableFrom(syntaxClass)){
+            try{
+                UmbaskaType umbaskaType = (UmbaskaType) syntaxClass.newInstance();
+                if (umbaskaType instanceof UmbaskaEnumType){
+                    ((UmbaskaEnumType) umbaskaType).setupMappings();
                 }
-            }
-            syntaxes = syntaxesList.toArray(new String[syntaxesList.size()]);
-        }else if (syntaxClass.isAnnotationPresent(BSyntax.class)) {
-            syntaxes = syntaxClass.getAnnotation(BSyntax.class).syntax();
-        }else if (syntaxClass.isAnnotationPresent(DynamicSyntaxes.class)){
-            try {
-                String[] syntaxesDetected = ((DynamicSyntax) syntaxClass.newInstance()).getSyntax();
-                if (syntaxesDetected == null){
-                    Umbaska.getInstance().getLogger().severe(String.format("Class %s has the DynamicSyntaxes annotation but does not implement DynamicSyntaxes properly (got null)", syntaxClass.getCanonicalName()));
-                    return;
-                }
-                syntaxes = syntaxesDetected;
-            } catch (InstantiationException | IllegalAccessException e) {
+                Classes.registerClass(umbaskaType.getClassInfo());
+                loadedTypes++;
+            } catch (InstantiationException | IllegalAccessException e){
                 e.printStackTrace();
             }
-        }else{
-            Umbaska.getInstance().getLogger().severe(String.format("Class %s does not have any of the annotations Syntaxes, Syntax, BSyntaxes, BSyntax, or DynamicSyntaxes", syntaxClass.getCanonicalName()));
-            return;
-        }
-        if (UmbaskaExpression.class.isAssignableFrom(syntaxClass)){
+        } else if (UmbaskaExpression.class.isAssignableFrom(syntaxClass)){
             try {
                 ExpressionType expressionType = ExpressionType.SIMPLE;
                 if (syntaxClass.isAnnotationPresent(ExprType.class)){
@@ -121,5 +133,9 @@ public class SyntaxLoader {
 
     public int getLoadedConditions() {
         return loadedConditions;
+    }
+
+    public int getLoadedTypes() {
+        return loadedTypes;
     }
 }
