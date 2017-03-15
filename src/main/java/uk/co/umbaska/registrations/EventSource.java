@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
  * @author Andrew Tran
  */
 public class EventSource implements Source<Event>{
-    Event event;
+    private Event event;
 
     public EventSource(Event event) {
         this.event = event;

@@ -18,9 +18,9 @@ import java.util.Map;
  * @author Andrew Tran
  */
 public abstract class UmbaskaEnumType<T extends Enum<T>> extends UmbaskaType<T>{
-    Class<T> enumClass;
-    Map<T, String> mappings = new HashMap<>();
-    Map<String, T> reverseMappings = new HashMap<>();
+    private Class<T> enumClass;
+    private Map<T, String> mappings = new HashMap<>();
+    private Map<String, T> reverseMappings = new HashMap<>();
 
     public Map<T, String> getMappings() {
         return mappings;
