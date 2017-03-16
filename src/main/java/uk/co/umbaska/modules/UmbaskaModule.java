@@ -80,6 +80,7 @@ public class UmbaskaModule {
             logger.info(String.format("%d Effects", syntaxLoader.getLoadedEffects()));
             logger.info(String.format("%d Conditions", syntaxLoader.getLoadedConditions()));
 			logger.info(String.format("%d Types", syntaxLoader.getLoadedTypes()));
+            logger.info(String.format("%d Events", syntaxLoader.getLoadedEvents()));
 
 		} catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();

@@ -3,10 +3,13 @@ package uk.co.umbaska.registrations;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.registrations.Classes;
+import ch.njol.skript.registrations.EventValues;
+import ch.njol.skript.util.Getter;
 import uk.co.umbaska.Umbaska;
 import uk.co.umbaska.registrations.annotations.*;
 import uk.co.umbaska.skript.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,7 @@ public class SyntaxLoader {
     private int loadedEffects = 0;
     private int loadedConditions = 0;
     private int loadedTypes = 0;
+    private int loadedEvents = 0;
 
     public void load(Class<? extends AutoRegisteringSkriptElement> syntaxClass){
         String[] syntaxes = null;
@@ -120,6 +124,20 @@ public class SyntaxLoader {
             } catch (InstantiationException | IllegalAccessException e){
                 e.printStackTrace();
             }
+        }else if (UmbaskaEvent.class.isAssignableFrom(syntaxClass)){
+            try{
+                UmbaskaEvent umbaskaEvent = (UmbaskaEvent) syntaxClass.newInstance();
+                Skript.registerEvent(umbaskaEvent.getName(), umbaskaEvent.getSkriptEvent(), umbaskaEvent.getEventClass(), syntaxes);
+                if (umbaskaEvent.getEventValues() != null){
+                    EventValue<?,?>[] eventValues = umbaskaEvent.getEventValues();
+                    for (EventValue<?,?> eventValue : eventValues){
+                        EventValues.registerEventValue(umbaskaEvent.getEventClass(), eventValue.getValueClass(), (Getter) eventValue, eventValue.getEventTime().getTime());
+                    }
+                }
+                loadedEvents++;
+            } catch (InstantiationException | IllegalAccessException e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -137,5 +155,9 @@ public class SyntaxLoader {
 
     public int getLoadedTypes() {
         return loadedTypes;
+    }
+
+    public int getLoadedEvents() {
+        return loadedEvents;
     }
 }
