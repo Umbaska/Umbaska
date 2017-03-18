@@ -1,10 +1,12 @@
 package uk.co.umbaska.skript;
 
+import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
+import uk.co.umbaska.modules.UmbaskaModule;
 import uk.co.umbaska.registrations.*;
 import uk.co.umbaska.registrations.annotations.BSyntax;
 import uk.co.umbaska.registrations.annotations.BSyntaxes;
@@ -14,7 +16,9 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
+ * An Abstract Class that can be implemented to make a new {@link Effect}
  * @author Andrew Tran
+ * @see UmbaskaModule#registerSyntaxes()
  */
 public abstract class UmbaskaEffect extends Effect implements AutoRegisteringSkriptElement, ExpressionManagerProvider, DynamicSyntax{
     private ExpressionManager expressionManager;

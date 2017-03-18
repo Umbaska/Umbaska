@@ -8,6 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Annotation that specifies the {@link ExpressionType} to be used when registering this {@link uk.co.umbaska.skript.UmbaskaExpression}
  * @author Andrew Tran
  */
 @Target(ElementType.TYPE)

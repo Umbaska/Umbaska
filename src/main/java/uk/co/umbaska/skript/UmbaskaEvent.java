@@ -1,7 +1,9 @@
 package uk.co.umbaska.skript;
 
+import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.SkriptEvent;
 import org.bukkit.event.Event;
+import uk.co.umbaska.modules.UmbaskaModule;
 import uk.co.umbaska.registrations.AutoRegisteringSkriptElement;
 
 import java.lang.reflect.ParameterizedType;
@@ -9,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * An Abstract Class that can be implemented to make a new {@link SkriptEvent}
  * @author Andrew Tran
+ * @see UmbaskaModule#registerSyntaxes()
  */
 public abstract class UmbaskaEvent<T extends Event> implements AutoRegisteringSkriptElement{
     private Class<? extends Event> eventClass;

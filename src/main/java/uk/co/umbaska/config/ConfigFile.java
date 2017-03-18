@@ -1,8 +1,5 @@
 package uk.co.umbaska.config;
 
-import ch.njol.skript.util.FileUtils;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import uk.co.umbaska.Umbaska;
 
@@ -10,12 +7,17 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * Represents a file that is a YAML configuration
  * @author Andrew Tran
  */
 public class ConfigFile {
     File file;
     YamlConfiguration configuration;
 
+    /**
+     * Constructs a Config File for {@code file}
+     * @param file the file to create a Config File for
+     */
     public ConfigFile(File file) {
         this.file = file;
         if (!file.exists()){
@@ -27,19 +29,36 @@ public class ConfigFile {
         }
     }
 
+    /**
+     * Constructs a Config File for {@code file} copying the file from within Umbaska if {@code file} is not found
+     * @param file the file to create a Config File for
+     * @param pathWithinJar the path within the Umbaska jar to copy if the file {@code file} does not exist
+     */
     public ConfigFile(File file, String pathWithinJar){
         this.file = file;
-        Umbaska.getInstance().saveResource(pathWithinJar, false);
+        if (!file.exists()){
+            Umbaska.getInstance().saveResource(pathWithinJar, false);
+        }
     }
 
+    /**
+     * Gets the file that the ConfigFile represents
+     * @return the file that the ConfigFile represents
+     */
     public File getFile() {
         return file;
     }
 
+    /**
+     * Reads the configuration to memory
+     */
     public void read(){
         configuration = YamlConfiguration.loadConfiguration(file);
     }
 
+    /**
+     * Writes the configuration to the disk
+     */
     public void save(){
         try {
             configuration.save(file);
@@ -48,6 +67,10 @@ public class ConfigFile {
         }
     }
 
+    /**
+     * Gets the {@link org.bukkit.configuration.file.YamlConfiguration} for the file
+     * @return the {@link org.bukkit.configuration.file.YamlConfiguration} for the file
+     */
     public YamlConfiguration getConfiguration() {
         return configuration;
     }

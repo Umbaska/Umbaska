@@ -9,12 +9,17 @@ import uk.co.umbaska.modules.ModuleManager;
 import java.io.File;
 
 /**
+ * The main plugin class for Umbaska
  * @author Andrew Tran
  */
 public class Umbaska extends JavaPlugin{
 
     private static Umbaska instance;
 
+    /**
+     * Gets the currently running instance of Umbaska
+     * @return the currently running instance of Umbaska
+     */
     public static Umbaska getInstance() {
         return instance;
     }
@@ -22,6 +27,9 @@ public class Umbaska extends JavaPlugin{
     private File mainConfigurationFile;
     private ConfigFile mainConfiguration;
 
+    /**
+     * Ran when Umbaska is being loaded by Bukkit
+     */
     @Override
     public void onEnable(){
         instance = this;
@@ -29,6 +37,7 @@ public class Umbaska extends JavaPlugin{
         if (Bukkit.getPluginManager().getPlugin("Skript") == null){
             getLogger().severe("Please make sure you have downloaded and installed Skript");
             Bukkit.getPluginManager().disablePlugin(this);
+            return;
         }
 
         if (!getDataFolder().exists()){
@@ -44,10 +53,18 @@ public class Umbaska extends JavaPlugin{
 
     }
 
+    /**
+     * Gets the main configuration file (config.yml)
+     * @return the main configuration file
+     */
     public File getMainConfigurationFile() {
         return mainConfigurationFile;
     }
 
+    /**
+     * Gets the main configuration
+     * @return the main configuration
+     */
     public ConfigFile getMainConfiguration() {
         return mainConfiguration;
     }

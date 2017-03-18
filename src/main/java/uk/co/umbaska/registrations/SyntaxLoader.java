@@ -9,11 +9,11 @@ import uk.co.umbaska.Umbaska;
 import uk.co.umbaska.registrations.annotations.*;
 import uk.co.umbaska.skript.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A class that loads {@link Skript} elements
  * @author Andrew Tran
  */
 public class SyntaxLoader {
@@ -23,6 +23,10 @@ public class SyntaxLoader {
     private int loadedTypes = 0;
     private int loadedEvents = 0;
 
+    /**
+     * Loads a {@link Skript} element class
+     * @param syntaxClass the class to register
+     */
     public void load(Class<? extends AutoRegisteringSkriptElement> syntaxClass){
         String[] syntaxes = null;
         if (!UmbaskaType.class.isAssignableFrom(syntaxClass)){
@@ -141,22 +145,42 @@ public class SyntaxLoader {
         }
     }
 
+    /**
+     * Gets the amount of loaded expressions
+     * @return the amount of loaded expressions
+     */
     public int getLoadedExpressions() {
         return loadedExpressions;
     }
 
+    /**
+     * Gets the amount of loaded effects
+     * @return the amount of loaded effects
+     */
     public int getLoadedEffects() {
         return loadedEffects;
     }
 
+    /**
+     * Gets the amount of loaded conditions
+     * @return the amount of loaded conditions
+     */
     public int getLoadedConditions() {
         return loadedConditions;
     }
 
+    /**
+     * Gets the amount of loaded types
+     * @return the amount of loaded types
+     */
     public int getLoadedTypes() {
         return loadedTypes;
     }
 
+    /**
+     * Gets the amount of loaded events
+     * @return the amount of loaded events
+     */
     public int getLoadedEvents() {
         return loadedEvents;
     }

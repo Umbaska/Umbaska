@@ -20,12 +20,20 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+/**
+ * Class that handles {@link UmbaskaModule UmbaskaModules}
+ * @author Nicofisi
+ */
 @SuppressWarnings("WeakerAccess") // Module developers may want to use some of the methods
 public class ModuleManager {
 	public static File modulesDir = null;
 	private static ArrayList<ModuleInfo> modulesToEnable = new ArrayList<>(3);
 	public static ArrayList<UmbaskaModule> enabledModules = new ArrayList<>();
 
+    /**
+     * Prepare for loading Modules
+     * @return the success status
+     */
 	public static boolean prepare() {
 		modulesDir = new File(Umbaska.getInstance().getDataFolder(), "modules");
 		if (!modulesDir.exists()) {
@@ -48,11 +56,17 @@ public class ModuleManager {
 	 * min-major-java-version: 69
 	 */
 
+    /**
+     * Load and Enable the {@link UmbaskaModule UmbaskaModules}
+     */
 	public static void loadAndEnableModules() {
 		loadModules();
 		enableModules();
 	}
 
+    /**
+     * Load the {@link UmbaskaModule UmbaskaModules}
+     */
 	private static void loadModules() {
 		File[] files = modulesDir.listFiles();
 		if (files == null) {
@@ -72,6 +86,9 @@ public class ModuleManager {
 		}
 	}
 
+    /**
+     * Enable the {@link UmbaskaModule UmbaskaModules}
+     */
 	public static void enableModules() {
 		for (ModuleInfo info : modulesToEnable) {
 			UmbaskaModule module = initMainClass(info);
@@ -86,6 +103,9 @@ public class ModuleManager {
 		}
 	}
 
+    /**
+     * Disable the {@link UmbaskaModule UmbaskaModules}
+     */
 	public static void disableModules() {
 		for (ModuleInfo info : ModuleInfo.moduleInfos) {
 			UmbaskaModule module = info.getUmbaskaModule();
@@ -97,6 +117,11 @@ public class ModuleManager {
 		}
 	}
 
+    /**
+     * Initiate the Main Class for specified {@code info}
+     * @param info the {@link ModuleInfo} to initiate the main class for
+     * @return the {@link UmbaskaModule}
+     */
 	public static UmbaskaModule initMainClass(ModuleInfo info) {
 		Umbaska.getInstance().getLogger().info(String.format("Enabling module %s v%s", info.getName(), info.getVersion()));
 		Class<?> cla;
@@ -123,6 +148,11 @@ public class ModuleManager {
 		return moduleMain;
 	}
 
+    /**
+     * Downloads a module from a specified {@link URL}
+     * @param url the URL to download the {@link UmbaskaModule} from
+     * @return the downloaded {@link UmbaskaModule} file
+     */
 	public static File downloadModuleFromUrl(String url) {
 		try {
 			File tempFile = File.createTempFile("umbaska-module", ".jar");
@@ -134,6 +164,11 @@ public class ModuleManager {
 		return null;
 	}
 
+    /**
+     * Get the {@link ModuleClassLoader} of a {@link File} which is a {@link UmbaskaModule}
+     * @param moduleFile the file to get the {@link ModuleClassLoader} of
+     * @return the {@link ModuleClassLoader} of the {@code moduleFile}
+     */
 	public static ModuleClassLoader getModuleClassLoader(File moduleFile) {
 		URL url = null;
 		String moduleFilePath = moduleFile.getAbsolutePath();
@@ -151,6 +186,11 @@ public class ModuleManager {
 		return cl;
 	}
 
+    /**
+     * Loads the {@link ModuleInfo} for specified {@link File}
+     * @param moduleFile the file to load the {@link ModuleInfo} from
+     * @return the loaded {@link ModuleInfo}
+     */
 	public static ModuleInfo loadModule(File moduleFile) {
 		YamlConfiguration moduleYml = null;
 		try {
@@ -180,7 +220,7 @@ public class ModuleManager {
 		}
 		final String basePackage = tbasePackage;
 		final String version = moduleYml.getString("version");
-		final int minUmbaskaBuildNumber = moduleYml.getInt("min-umbaska-build-number");
+		final String minUmbaskaBuild = moduleYml.getString("min-umbaska-build");
 		final int minMajorJavaVersion = moduleYml.getInt("min-major-java-version");
 		/*if (minUmbaskaBuildNumber > Umbaska.VERSION_INTEGER) {
 			Umbaska.moduleManagerWarning("The module ", name, " v", version, " (", versionInteger,
@@ -193,13 +233,20 @@ public class ModuleManager {
 
 		loadClasses(moduleFile, basePackage, loader);
 
-		ModuleInfo info = ModuleInfo.getModuleInfoFor(moduleFile, basePackage, name, version,mainClassPath, minUmbaskaBuildNumber, minMajorJavaVersion, loader);
+		ModuleInfo info = ModuleInfo.getModuleInfoFor(moduleFile, basePackage, name, version,mainClassPath, minUmbaskaBuild, minMajorJavaVersion, loader);
 		if (info == null) {
 			Umbaska.getInstance().getLogger().severe("Could not load the details of module at " + moduleFile.getAbsolutePath());
 		}
 		return info;
 	}
 
+    /**
+     * Load the classes in a file which represents an {@link UmbaskaModule}
+     * @param moduleFile the file which represents an {@link UmbaskaModule}
+     * @param basePackage the base package of the {@link UmbaskaModule}
+     * @param loader the {@link ModuleClassLoader} for the {@link UmbaskaModule}
+     * @return the success state
+     */
 	@SuppressWarnings("resource")
 	public static boolean loadClasses(File moduleFile, String basePackage, ModuleClassLoader loader) {
 		JarFile jarFile = null;
@@ -233,6 +280,10 @@ public class ModuleManager {
 		return true;
 	}
 
+    /**
+     * Get the enabled {@link UmbaskaModule UmbaskaModules}
+     * @return the enabled {@link UmbaskaModule UmbaskaModules}
+     */
 	public static ArrayList<UmbaskaModule> getEnabledModules() {
 		return enabledModules;
 	}

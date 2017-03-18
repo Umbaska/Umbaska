@@ -11,12 +11,16 @@ import java.net.URLEncoder;
 import java.util.*;
 import java.util.logging.*;
 
+/**
+ * Class that represents a module for the plugin {@link Umbaska}
+ * @author Nicofisi
+ * @author Andrew Tran
+ */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class UmbaskaModule {
 	private ModuleInfo moduleInfo;
 	private boolean enabled = false;
 	private Logger logger;
-
 
 	public final void setModuleInfo(ModuleInfo moduleInfo) {
 		this.moduleInfo = moduleInfo;

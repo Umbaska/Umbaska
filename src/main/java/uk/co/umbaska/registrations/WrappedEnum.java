@@ -1,6 +1,7 @@
 package uk.co.umbaska.registrations;
 
 /**
+ * WIP : A class to wrap an {@link Enum} to avoid type conflicts
  * @author Andrew Tran
  */
 public class WrappedEnum<T extends Enum<T>> {

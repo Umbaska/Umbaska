@@ -5,15 +5,24 @@ import uk.co.umbaska.Umbaska;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Class that represents all the info for a {@link uk.co.umbaska.modules.UmbaskaModule}
+ * @author Nicofisi
+ */
 public class ModuleInfo {
 	public static ArrayList<ModuleInfo> moduleInfos = new ArrayList<>(5);
 
-	private String name, mainClassPath, basePackage, version;
-	private int minMajorJavaVersion, minUmbaskaBuildNumber;
+	private String name, mainClassPath, basePackage, version, minUmbaskaBuild;
+	private int minMajorJavaVersion;
 	private File moduleFile;
 	private ClassLoader classLoader;
 	private UmbaskaModule umbaskaModule;
 
+    /**
+     * Gets a {@link ModuleInfo} by a {@code name}
+     * @param name the name of the {@link UmbaskaModule} to retrieve the {@link ModuleInfo} for
+     * @return the ModuleInfo for a specified {@code name}
+     */
 	public static ModuleInfo getInfoByName(String name) {
 		for (ModuleInfo info : moduleInfos) {
 			if (info.getName().equals(name)) {
@@ -23,9 +32,21 @@ public class ModuleInfo {
 		return null;
 	}
 
+    /**
+     * Creates a ModuleInfo for the specified parameters
+     * @param moduleFile the File for the JAR File of the {@link UmbaskaModule}
+     * @param basePackage the base package of the {@link UmbaskaModule}
+     * @param name the name of the {@link UmbaskaModule}
+     * @param version the version of the {@link UmbaskaModule}
+     * @param mainClassPath the path to the main class ({@link Class#getCanonicalName()} for the {@link UmbaskaModule}
+     * @param minUmbaskaBuild the minimum Umbaska build needed for the {@link UmbaskaModule}
+     * @param minMajorJavaVersion the minimum major java version for the {@link UmbaskaModule}
+     * @param classLoader the {@link ClassLoader} for the {@link UmbaskaModule}
+     * @return the constructed ModuleInfo
+     */
 	public static ModuleInfo getModuleInfoFor(
 			File moduleFile, String basePackage, String name, String version, String mainClassPath,
-			int minUmbaskaBuildNumber, int minMajorJavaVersion, ClassLoader classLoader) {
+			String minUmbaskaBuild, int minMajorJavaVersion, ClassLoader classLoader) {
 
 		for (ModuleInfo info : moduleInfos) {
 			if (info.getModuleFile().getAbsolutePath().equals(moduleFile.getAbsolutePath())) {
@@ -39,18 +60,18 @@ public class ModuleInfo {
 		}
 		ModuleInfo outInfo = new ModuleInfo(
 				moduleFile, basePackage, name, version, mainClassPath,
-				minUmbaskaBuildNumber, minMajorJavaVersion, classLoader);
+				minUmbaskaBuild, minMajorJavaVersion, classLoader);
 		moduleInfos.add(outInfo);
 		return outInfo;
 	}
 
 	private ModuleInfo(File moduleFile, String basePackage, String name, String version,
-                       String mainClassPath, int minUmbaskaBuildNumber, int minMajorJavaVersion, ClassLoader classLoader) {
+                       String mainClassPath, String minUmbaskaBuild, int minMajorJavaVersion, ClassLoader classLoader) {
 		this.moduleFile = moduleFile;
 		this.basePackage = basePackage;
 		this.name = name;
 		this.version = version;
-		this.minUmbaskaBuildNumber = minUmbaskaBuildNumber;
+		this.minUmbaskaBuild = minUmbaskaBuild;
 		this.mainClassPath = mainClassPath;
 		this.minMajorJavaVersion = minMajorJavaVersion;
 		this.classLoader = classLoader;
@@ -68,8 +89,8 @@ public class ModuleInfo {
 		return umbaskaModule;
 	}
 
-	public int getMinUmbaskaBuildNumber() {
-		return minUmbaskaBuildNumber;
+	public String getMinUmbaskaBuild() {
+		return minUmbaskaBuild;
 	}
 
 	public String getMainClassPath() {

@@ -3,10 +3,12 @@ package uk.co.umbaska.skript;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.Serializer;
+import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.util.SimpleLiteral;
 import ch.njol.skript.localization.Language;
 import ch.njol.yggdrasil.Fields;
+import uk.co.umbaska.modules.UmbaskaModule;
 
 import java.io.NotSerializableException;
 import java.io.StreamCorruptedException;
@@ -15,7 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * An Abstract Class that can be implemented to make a new {@link ch.njol.skript.Skript} class (type) for an {@link Enum}
  * @author Andrew Tran
+ * @see UmbaskaModule#registerSyntaxes()
  */
 public abstract class UmbaskaEnumType<T extends Enum<T>> extends UmbaskaType<T>{
     private Class<T> enumClass;
