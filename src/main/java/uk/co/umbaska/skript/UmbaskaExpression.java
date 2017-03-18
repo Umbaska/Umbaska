@@ -80,16 +80,10 @@ public abstract class UmbaskaExpression<T> extends SimpleExpression<T> implement
     @Override
     public Class<? extends T> getReturnType() {
         if (inferredClass == null){
-            Type superClass = getClass().getGenericSuperclass();
-            Type genericType = ((ParameterizedType)superClass).getActualTypeArguments()[0];
-            String className = genericType.toString().split(" ")[1];
-            try {
-                /* Should work hopefully ; Cross your fingers!
-                 If anyone knows a better way, let me know! */
-                inferredClass = (Class<T>) Class.forName(className);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            /* Should work hopefully ; Cross your fingers!
+             If anyone knows a better way, let me know! */
+            inferredClass = (Class<T>) ((ParameterizedType) getClass()
+                    .getGenericSuperclass()).getActualTypeArguments()[0];
         }
         return inferredClass;
     }

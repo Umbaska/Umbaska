@@ -22,6 +22,7 @@ import java.util.function.Function;
  */
 public abstract class UmbaskaEffect extends Effect implements AutoRegisteringSkriptElement, ExpressionManagerProvider, DynamicSyntax{
     private ExpressionManager expressionManager;
+    private Event currentEvent;
 
     @Override
     public String[] getSyntax() {
@@ -81,6 +82,7 @@ public abstract class UmbaskaEffect extends Effect implements AutoRegisteringSkr
 
     @Override
     protected void execute(Event event) {
+        setCurrentEvent(event);
         if (isUsingExpressionManager()){
             exp().setEvent(event);
         }
@@ -125,5 +127,13 @@ public abstract class UmbaskaEffect extends Effect implements AutoRegisteringSkr
     @Override
     public Boolean isUsingExpressionManager() {
         return getExpressionManager() != null;
+    }
+
+    public Event getCurrentEvent() {
+        return currentEvent;
+    }
+
+    public void setCurrentEvent(Event currentEvent) {
+        this.currentEvent = currentEvent;
     }
 }

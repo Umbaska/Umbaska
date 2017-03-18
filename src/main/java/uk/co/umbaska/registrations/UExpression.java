@@ -39,7 +39,7 @@ public class UExpression<T>{
      * @return the value of the expression from an event
      */
     public T get(Event event){
-        return skriptExpression.getSingle(event);
+        return skriptExpression != null ? skriptExpression.getSingle(event) : null;
     }
 
     /**
@@ -48,6 +48,6 @@ public class UExpression<T>{
      * @return the values of the expression from an event
      */
     public T[] getMultiple(Event event){
-        return skriptExpression.getAll(event);
+        return skriptExpression != null ? skriptExpression.getAll(event) : null;
     }
 }
