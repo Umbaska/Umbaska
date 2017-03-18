@@ -23,7 +23,12 @@ import java.util.Map;
 public abstract class UmbaskaAsyncEffect extends UmbaskaEffect{
     @Override
     protected TriggerItem walk(Event e) {
-        execute(e);
+        runAsync(new Runnable() {
+            @Override
+            public void run() {
+                execute(e);
+            }
+        });
         return null;
     }
 

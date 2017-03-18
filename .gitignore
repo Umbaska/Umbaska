@@ -3,6 +3,7 @@
 Umbaska.iml
 #Maven
 target/
+dependency-reduced-pom.xml
 #Project Specific
 spigotbuild/
 run/
